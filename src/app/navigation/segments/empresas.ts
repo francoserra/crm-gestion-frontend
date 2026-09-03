@@ -17,5 +17,13 @@ export const empresas: NavigationTree = {
       transKey: "nav.empresas.home",
       icon: "empresas.home",
     },
+    {
+      id: "empresas.crear",
+      path: path(ROOT_EMPRESAS, "/crear"),
+      type: "item",
+      title: "Nueva Empresa",
+      transKey: "nav.empresas.crear",
+      icon: "empresas.crear",
+    },
   ],
 };

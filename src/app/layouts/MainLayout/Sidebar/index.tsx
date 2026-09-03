@@ -21,7 +21,9 @@ export function Sidebar() {
   const { isExpanded, close } = useSidebarContext();
 
   const initialSegment = useMemo(
-    () => navigation.find((item) => isRouteActive(item.path, pathname)),
+    () => navigation.find((item) => {
+      return isRouteActive(item.path, pathname, false);
+    }),
     // eslint-disable-next-line react-hooks/exhaustive-deps
     [],
   );
@@ -36,7 +38,9 @@ export function Sidebar() {
 
   useDidUpdate(() => {
     const activePath = navigation.find((item) =>
-      isRouteActive(item.path, pathname),
+      {
+        return isRouteActive(item.path, pathname, false)
+      },
     )?.path;
 
     setActiveSegmentPath(activePath);

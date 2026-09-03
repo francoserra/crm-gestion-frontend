@@ -27,6 +27,7 @@ export function MenuItem({ data }: { data: NavigationTree }) {
   return (
     <NavLink
       to={path as string}
+        end
       onClick={handleMenuItemClick}
       id={id}
       className={({ isActive }) =>

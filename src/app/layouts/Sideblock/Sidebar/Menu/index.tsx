@@ -17,7 +17,7 @@ export function Menu() {
   const ref = useRef<HTMLDivElement | null>(null);
 
   const activeGroup = navigation.find((item) => {
-    if (item.path) return isRouteActive(item.path, pathname);
+    if (item.path) return isRouteActive(item.path, pathname, false);
   });
 
   const activeCollapsible = activeGroup?.childs?.find((item) => {

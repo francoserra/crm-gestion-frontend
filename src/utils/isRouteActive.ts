@@ -10,7 +10,8 @@ import { matchPath } from "react-router";
 export function isRouteActive(
   path: string | undefined,
   pathname: string,
+  end = true,
 ): boolean {
   // Check if the given path matches the current pathname using react-router's matchPath
-  return path ? !!matchPath({ path, end: false }, pathname) : false;
+  return path ? !!matchPath({ path, end }, pathname) : false;
 }

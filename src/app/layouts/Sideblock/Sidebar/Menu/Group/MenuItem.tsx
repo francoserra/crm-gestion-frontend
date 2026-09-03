@@ -38,6 +38,7 @@ export function MenuItem({ data }: { data: NavigationTree }) {
     <div className="relative flex px-3">
       <NavLink
         to={path}
+        end
         onClick={handleMenuItemClick}
         className={({ isActive }) =>
           clsx(

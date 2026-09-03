@@ -28,7 +28,7 @@ export function MainPanel({
   activeSegmentPath,
 }: MainPanelProps) {
   const { cardSkin } = useThemeContext();
-
+  
   return (
     <div className="main-panel">
       <div

@@ -45,6 +45,13 @@ const protectedRoutes: RouteObject = {
                 Component: (await import("@/app/pages/empresas/home")).default,
               }),
             },
+            {
+              index: true,
+              path: "crear",
+              lazy: async () => ({
+                Component: (await import("@/app/pages/empresas/crud/crear")).default,
+              }),
+            },
           ],
         },
       ],

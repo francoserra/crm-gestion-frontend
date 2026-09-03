@@ -6,7 +6,8 @@
     },
     "empresas": {
       "empresas": "Gestión de Empresas",
-      "home": "Empresas"
+      "home": "Empresas",
+      "crear": "Nueva Empresa"
     },
     "settings": {
       "settings": "Settings",
