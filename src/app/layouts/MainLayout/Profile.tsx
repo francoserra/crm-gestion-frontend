@@ -5,6 +5,7 @@ import {
   PopoverPanel,
   Transition,
 } from "@headlessui/react";
+import { useState } from "react";
 import {
   ArrowLeftStartOnRectangleIcon,
   ChatBubbleLeftIcon,
@@ -14,8 +15,10 @@ import { TbCoins, TbUser, TbUsersGroup } from "react-icons/tb";
 import { Link } from "react-router";
 
 // Local Imports
-import { Avatar, AvatarDot, Button } from "@/components/ui";
+import { Avatar, AvatarDot, Button, Spinner } from "@/components/ui";
 import { ColorType } from "@/constants/app";
+import { useAuthContext } from "@/app/contexts/auth/context";
+
 
 // Define Link Types
 interface LinkItem {
@@ -70,9 +73,19 @@ const links: LinkItem[] = [
   },
 ];
 
+
 // ----------------------------------------------------------------------
 
 export function Profile() {
+  const {user} = useAuthContext();
+  const [isLoading, setLoading] = useState(false);
+
+  const handleLogout = () => {
+    setLoading(true);
+    logout().finally(() => setLoading(false));
+  }
+  const { logout } = useAuthContext();
+  
   return (
     <Popover className="relative">
       <PopoverButton
@@ -113,7 +126,7 @@ export function Profile() {
                     className="text-base font-medium text-gray-700 hover:text-primary-600 focus:text-primary-600 dark:text-dark-100 dark:hover:text-primary-400 dark:focus:text-primary-400"
                     to="/settings/general"
                   >
-                    Travis Fuller
+                    {user?.username}
                   </Link>
                   <p className="mt-0.5 text-xs text-gray-400 dark:text-dark-300">
                     Product Designer
@@ -150,9 +163,14 @@ export function Profile() {
 
                 {/* Logout Button */}
                 <div className="px-4 pt-4">
-                  <Button className="w-full gap-2">
-                    <ArrowLeftStartOnRectangleIcon className="size-4.5" />
-                    <span>Logout</span>
+                  <Button className="w-full gap-2" onClick={() => handleLogout()}>
+                    {isLoading ? <Spinner color="white" className="size-5 border-2" /> : (
+                      <>
+                        <ArrowLeftStartOnRectangleIcon className="size-4.5" />
+                        <span>Cerrar Sesion</span>
+                      </>
+                    )}
+                    
                   </Button>
                 </div>
               </div>

@@ -13,7 +13,7 @@ export const dashboards: NavigationTree = {
       id: "dashboards.home",
       path: path(ROOT_DASHBOARDS, "/home"),
       type: "item",
-      title: "Home",
+      title: "Principal",
       transKey: "nav.dashboards.home",
       icon: "dashboards.home",
     },

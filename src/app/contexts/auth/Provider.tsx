@@ -87,72 +87,51 @@ export function AuthProvider({ children }: { children: ReactNode }) {
   const { setNotificationPosition } = useThemeContext();
 
   useEffect(() => {
-    const init = async () => {
-      try {
-        const authToken = window.localStorage.getItem("access_token");
+  const init = async () => {
+    try {
+      // 1. Solicitamos la información del usuario directamente al servidor.
+      // Axios enviará la cookie automáticamente si activaste `withCredentials: true`.
+      const response = await axios.get<{ user: User }>(API_BASE_URL + "/auth/user", { withCredentials: true });
+      const { user } = response.data;
 
-        if (authToken && isTokenValid(authToken)) {
-          setSession(authToken);
 
-          return;
-          const response = await axios.get<{ user: User }>("/user/profile");
-          const { user } = response.data;
+      // 2. Si responde correctamente (200 OK), validamos la sesión.
+      dispatch({
+        type: "INITIALIZE",
+        payload: {
+          isAuthenticated: true,
+          user,
+        },
+      });
+    } catch (err) {
+      // 3. Si la cookie expiró o no existe (401), anulamos la sesión.
+      console.error(err);
+      dispatch({
+        type: "INITIALIZE",
+        payload: {
+          isAuthenticated: false,
+          user: null,
+        },
+      });
+    }
+  };
 
-          dispatch({
-            type: "INITIALIZE",
-            payload: {
-              isAuthenticated: true,
-              user,
-            },
-          });
-        } else {
-          dispatch({
-            type: "INITIALIZE",
-            payload: {
-              isAuthenticated: false,
-              user: null,
-            },
-          });
-        }
-      } catch (err) {
-        console.error(err);
-        dispatch({
-          type: "INITIALIZE",
-          payload: {
-            isAuthenticated: false,
-            user: null,
-          },
-        });
-      }
-    };
+  init();
+}, []);
 
-    init();
-  }, []);
-
-  const login = async (credentials: { email: string; password: string }) => {
+  const login = async (credentials: { username: string; password: string }) => {
     dispatch({ type: "LOGIN_REQUEST" });
 
     try {
-      console.log(credentials)
-
-      const response = await axios.post<{ access_token: string; user: User }>(
-        API_BASE_URL +"/auth/login",
+      const response = await axios.post<{ data: User }>(
+        API_BASE_URL + "/auth/login",
         credentials,
+        { withCredentials: true }
       );
-      console.log(response.data)
-      const { access_token } = response.data;
-
-      if (
-        typeof access_token !== "string"
-      ) {
-        throw new Error("Response is not valid");
-      }
-
-      setSession(access_token);
 
       dispatch({
         type: "LOGIN_SUCCESS",
-        payload: { user: null },
+        payload: { user: response.data.data },
       });
     } catch (err:any) {
       const errorMsg =
@@ -175,8 +154,20 @@ export function AuthProvider({ children }: { children: ReactNode }) {
   };
 
   const logout = async () => {
-    setSession(null);
-    dispatch({ type: "LOGOUT" });
+    try {
+      await axios.post(API_BASE_URL + "/auth/logout", {},{ withCredentials: true });
+      dispatch({ type: "LOGOUT" });
+    } catch (err:any) {
+      const errorMsg =
+          err?.response?.data?.error_description ||
+          err?.error_description ||
+          "Error al cerrar sesión";
+
+        toast.error(errorMsg, {
+          className: "soft-color",
+        });
+        setNotificationPosition("top-right");
+    }
   };
 
   if (!children) {

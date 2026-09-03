@@ -26,7 +26,7 @@ export default function SignIn() {
   } = useForm({
     resolver: yupResolver(schema),
     defaultValues: {
-      username: "admin@example.com",
+      username: "test",
       password: "password",
     },
   });
@@ -34,7 +34,7 @@ export default function SignIn() {
   const onSubmit = (data: AuthFormValues) => {
     setLoading(true);
     login({
-      email: data.username,
+      username: data.username,
       password: data.password,
     }).finally(() => setLoading(false));
   };
@@ -103,7 +103,7 @@ export default function SignIn() {
               </div>
 
               <Button type="submit" className="mt-5 w-full" color="primary" disabled={isLoading}>
-                {isLoading ? <Spinner color="white" className="size-5 border-2" /> : "Sign In"}
+                {isLoading ? <Spinner color="white" className="size-5 border-2" /> : "Iniciar Sesión"}
               </Button>
             </form>
             <div className="mt-4 text-center text-xs-plus">
