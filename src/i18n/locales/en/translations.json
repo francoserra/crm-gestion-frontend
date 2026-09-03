@@ -4,6 +4,10 @@
       "dashboards": "Dashboards",
       "home": "Principal"
     },
+    "empresas": {
+      "empresas": "Gestión de Empresas",
+      "home": "Empresas"
+    },
     "settings": {
       "settings": "Settings",
       "general": "General",

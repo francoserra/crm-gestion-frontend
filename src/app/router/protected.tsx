@@ -13,33 +13,44 @@ const protectedRoutes: RouteObject = {
   id: "protected",
   Component: AuthGuard,
   children: [
-    // The dynamic layout supports both the main layout and the sideblock.
+    // 1. Un solo bloque para todas las rutas que usan DynamicLayout
     {
       Component: DynamicLayout,
       children: [
         {
           index: true,
-          element: <Navigate to="/dashboards/home" />,
+          element: <Navigate to="/dashboards/home" replace />,
         },
         {
           path: "dashboards",
           children: [
             {
               index: true,
-              element: <Navigate to="/dashboards/home" />,
+              element: <Navigate to="/dashboards/home" replace />,
             },
             {
               path: "home",
               lazy: async () => ({
-                Component: (await import("@/app/pages/dashboards/home"))
-                  .default,
+                Component: (await import("@/app/pages/dashboards/home")).default,
+              }),
+            },
+          ],
+        },
+        {
+          path: "empresas",
+          children: [
+            {
+              index: true,
+              lazy: async () => ({
+                Component: (await import("@/app/pages/empresas/home")).default,
               }),
             },
           ],
         },
       ],
     },
-    // The app layout supports only the main layout. Avoid using it for other layouts.
+
+    // 2. Bloque para páginas que usan AppLayout
     {
       Component: AppLayout,
       children: [
@@ -51,7 +62,7 @@ const protectedRoutes: RouteObject = {
           children: [
             {
               index: true,
-              element: <Navigate to="/settings/general" />,
+              element: <Navigate to="/settings/general" replace />,
             },
             {
               path: "general",
